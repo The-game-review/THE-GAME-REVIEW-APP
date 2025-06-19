@@ -1,0 +1,83 @@
+import axiosInstance from '@utils/api/axiosInstance';
+
+const BASE_URL = import.meta.env.VITE_API_ENDPOINT;
+const API_KEY = import.meta.env.VITE_API_KEY;
+const isDev = import.meta.env.MODE === 'test';
+
+/**
+ * Fonction de connexion à un compte
+ *
+ * @param {string} email
+ * @param {string} password
+ */
+export const login = async (email: string, password: string) => {
+  try {
+    if (isDev) {
+      const devToken = 'dev-token';
+      const devUser = { email, pseudo: 'DevUser' };
+      const devRefreshToken = 'dev-refresh-token';
+      return { success: true, token: devToken, user: devUser, refreshToken: devRefreshToken };
+    }
+
+    let { data, status } = await axiosInstance.post(
+      `${BASE_URL}/auth/login`,
+      { email, password },
+      { headers: { 'x-api-key': API_KEY } }
+    );
+
+    data = data.data
+
+    if (status !== 200) {
+      throw new Error('An error occurred during login.');
+    }
+    return { success: true, user: { pseudo: data.pseudo, email: email, profilePictureId: data.profile_picture_id }, token: data.token, refreshToken: data.refreshToken };
+  } catch (error: any) {
+    return { success: false, message: error.response?.data?.message ?? 'An error occurred during login.' };
+  }
+};
+
+/**
+ * Fonction de création de compte
+ *
+ * @param {string} email
+ * @param {string} pseudo
+ * @param {string} password
+ * @param {string} confirmPassword
+ */
+export const register = async (
+  email: string,
+  pseudo: string,
+  password: string,
+  confirmPassword: string
+) => {
+  try {
+    if (password !== confirmPassword) {
+      return { success: false, message: 'The password doesn\'t match' };
+    }
+    if (isDev) {
+      const devToken = 'dev-token';
+      const devUser = { email, pseudo: 'DevUser' };
+      const devRefreshToken = 'dev-refresh-token';
+      return { success: true, token: devToken, user: devUser, refreshToken: devRefreshToken };
+    }
+
+    let { data, status } = await axiosInstance.post(
+      `${BASE_URL}/auth/register`,
+      {
+        email,
+        pseudo,
+        password,
+        confirmPassword,
+      },
+      { headers: { 'x-api-key': API_KEY } }
+    );
+
+    data = data.data
+
+    if (status !== 201) throw new Error('Registration failed.');
+
+    return { success: true, user: { pseudo: data.pseudo, email: email, profilePictureId: data.profile_picture_id }, token: data.token, refreshToken: data.refreshToken };
+  } catch (error: any) {
+    return { success: false, message: error.response?.data?.message ?? 'An error occurred' };
+  }
+};
