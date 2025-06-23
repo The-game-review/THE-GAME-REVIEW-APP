@@ -26,5 +26,8 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    allowedHosts: ["the-game-review-app.onrender.com"],
+  },
   plugins: [react(), svgr()],
 });
