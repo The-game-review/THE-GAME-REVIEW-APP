@@ -1,8 +1,14 @@
 # 📌 Projet THE GAME REVIEW
 
-Bienvenue dans le projet **THE GAME REVIEW** ! Ce guide est destiné aux développeurs souhaitant collaborer sur ce projet.
+Bienvenue dans le projet **THE GAME REVIEW** ! Ce site est conçu pour offrir aux joueurs une plateforme dédiée à la découverte et au partage de leurs expériences avec d'autres passionnés.
 
 ---
+
+## Membre du projet
+- Evan FERRON
+- Evan GUILLET
+- Maxime FUZEAU
+- Matias BELLAUD
 
 ## 📂 Structure du projet
 
